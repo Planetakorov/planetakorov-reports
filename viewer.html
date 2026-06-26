@@ -1,153 +1,242 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Годовой отчёт 2024</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <style>
-    body {
-      margin: 0;
-      background: #FBFAF6;
-      font-family: Arial, sans-serif;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Годовой отчёт 2024</title>
 
-    .toolbar {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 14px;
-      padding: 16px;
-      background: #5F723B;
-      color: #FCFAF4;
-    }
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
-    button {
-      border: none;
-      background: #FCFAF4;
-      color: #5F723B;
-      padding: 10px 18px;
-      border-radius: 30px;
-      font-size: 15px;
-      cursor: pointer;
-    }
+<style>
+:root{
+  --green:#5F723B;
+  --green-hover:#70884A;
+  --cream:#FBFAF6;
+  --text:#2F241D;
+  --muted:#8B8278;
+  --white:#FCFAF4;
+}
 
-    button:hover {
-      background: #ECE8DD;
-    }
+*{box-sizing:border-box}
 
-    .pdf-wrap {
-      max-width: 1100px;
-      margin: 30px auto;
-      padding: 0 16px 40px;
-      text-align: center;
-    }
+body{
+  margin:0;
+  background:var(--cream);
+  font-family:Lato,Arial,sans-serif;
+  color:var(--text);
+}
 
-    canvas {
-      width: 100%;
-      height: auto;
-      background: #fff;
-      box-shadow: 0 10px 40px rgba(0,0,0,.12);
-      border-radius: 12px;
-    }
+.pk-toolbar{
+  position:sticky;
+  top:0;
+  z-index:10;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:14px 22px;
+  background:var(--green);
+  color:var(--white);
+  box-shadow:0 4px 20px rgba(0,0,0,.12);
+}
 
-    .page-info {
-      min-width: 120px;
-      text-align: center;
-      font-size: 15px;
-    }
+.pk-title{
+  font-size:16px;
+  font-weight:600;
+  white-space:nowrap;
+}
 
-    @media (max-width: 640px) {
-      .toolbar {
-        gap: 8px;
-        padding: 12px 8px;
-      }
+.pk-controls{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
 
-      button {
-        padding: 8px 12px;
-        font-size: 13px;
-      }
+.pk-btn{
+  border:0;
+  background:var(--white);
+  color:var(--green);
+  padding:9px 15px;
+  border-radius:999px;
+  font-size:14px;
+  cursor:pointer;
+  transition:.2s;
+}
 
-      .page-info {
-        min-width: 80px;
-        font-size: 13px;
-      }
-    }
-  </style>
+.pk-btn:hover{
+  background:#ECE8DD;
+}
+
+.pk-info{
+  min-width:92px;
+  text-align:center;
+  font-size:14px;
+  color:var(--white);
+}
+
+.pk-download{
+  color:var(--white);
+  text-decoration:none;
+  border:1px solid rgba(252,250,244,.5);
+  padding:9px 16px;
+  border-radius:999px;
+  font-size:14px;
+  transition:.2s;
+}
+
+.pk-download:hover{
+  background:rgba(252,250,244,.14);
+}
+
+.pk-wrap{
+  max-width:1120px;
+  margin:32px auto;
+  padding:0 18px 50px;
+  text-align:center;
+}
+
+canvas{
+  width:100%;
+  height:auto;
+  background:#fff;
+  border-radius:18px;
+  box-shadow:0 12px 45px rgba(0,0,0,.14);
+}
+
+.pk-loader{
+  padding:80px 20px;
+  color:var(--muted);
+  font-size:18px;
+}
+
+@media(max-width:760px){
+  .pk-toolbar{
+    flex-direction:column;
+    align-items:stretch;
+    padding:12px;
+  }
+
+  .pk-title{
+    text-align:center;
+    white-space:normal;
+    font-size:15px;
+  }
+
+  .pk-controls{
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+
+  .pk-btn,.pk-download{
+    font-size:13px;
+    padding:8px 12px;
+  }
+
+  .pk-wrap{
+    margin:18px auto;
+    padding:0 10px 35px;
+  }
+
+  canvas{
+    border-radius:12px;
+  }
+}
+</style>
 </head>
+
 <body>
 
-<div class="toolbar">
-  <button id="prev">← Назад</button>
-  <div class="page-info">
-    <span id="page_num">1</span> / <span id="page_count">—</span>
+<div class="pk-toolbar">
+  <div class="pk-title">Годовой отчёт фонда за 2024 год</div>
+
+  <div class="pk-controls">
+    <button class="pk-btn" id="prev">←</button>
+    <div class="pk-info"><span id="page_num">1</span> / <span id="page_count">—</span></div>
+    <button class="pk-btn" id="next">→</button>
+    <button class="pk-btn" id="zoomOut">−</button>
+    <button class="pk-btn" id="zoomIn">+</button>
+    <a class="pk-download" href="report-2024.pdf.pdf" target="_blank">Скачать PDF</a>
   </div>
-  <button id="next">Вперёд →</button>
-  <button id="zoomOut">−</button>
-  <button id="zoomIn">+</button>
 </div>
 
-<div class="pdf-wrap">
-  <canvas id="pdf-canvas"></canvas>
+<div class="pk-wrap">
+  <div class="pk-loader" id="loader">Загружаем отчёт...</div>
+  <canvas id="pdf-canvas" style="display:none;"></canvas>
 </div>
 
 <script>
-  const url = 'report-2024.pdf.pdf';
+const url = 'report-2024.pdf.pdf';
 
-  pdfjsLib.GlobalWorkerOptions.workerSrc =
-    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-  let pdfDoc = null;
-  let pageNum = 1;
-  let scale = 1.4;
-  const canvas = document.getElementById('pdf-canvas');
-  const ctx = canvas.getContext('2d');
+let pdfDoc = null;
+let pageNum = 1;
+let scale = window.innerWidth < 760 ? 1.15 : 1.55;
+let isRendering = false;
 
-  function renderPage(num) {
-    pdfDoc.getPage(num).then(function(page) {
-      const viewport = page.getViewport({ scale: scale });
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
+const canvas = document.getElementById('pdf-canvas');
+const ctx = canvas.getContext('2d');
+const loader = document.getElementById('loader');
 
-      page.render({
-        canvasContext: ctx,
-        viewport: viewport
-      });
+function renderPage(num){
+  if(!pdfDoc || isRendering) return;
+  isRendering = true;
 
+  pdfDoc.getPage(num).then(page=>{
+    const viewport = page.getViewport({scale});
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+
+    const renderContext = {
+      canvasContext:ctx,
+      viewport:viewport
+    };
+
+    page.render(renderContext).promise.then(()=>{
       document.getElementById('page_num').textContent = num;
+      loader.style.display = 'none';
+      canvas.style.display = 'block';
+      isRendering = false;
     });
-  }
-
-  pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
-    pdfDoc = pdfDoc_;
-    document.getElementById('page_count').textContent = pdfDoc.numPages;
-    renderPage(pageNum);
   });
+}
 
-  document.getElementById('prev').addEventListener('click', function() {
-    if (pageNum <= 1) return;
-    pageNum--;
-    renderPage(pageNum);
-  });
+pdfjsLib.getDocument(url).promise.then(pdf=>{
+  pdfDoc = pdf;
+  document.getElementById('page_count').textContent = pdf.numPages;
+  renderPage(pageNum);
+}).catch(()=>{
+  loader.textContent = 'Не удалось загрузить PDF. Проверьте имя файла.';
+});
 
-  document.getElementById('next').addEventListener('click', function() {
-    if (pageNum >= pdfDoc.numPages) return;
-    pageNum++;
-    renderPage(pageNum);
-  });
+document.getElementById('prev').onclick = ()=>{
+  if(pageNum <= 1) return;
+  pageNum--;
+  renderPage(pageNum);
+};
 
-  document.getElementById('zoomIn').addEventListener('click', function() {
-    scale += 0.2;
-    renderPage(pageNum);
-  });
+document.getElementById('next').onclick = ()=>{
+  if(pageNum >= pdfDoc.numPages) return;
+  pageNum++;
+  renderPage(pageNum);
+};
 
-  document.getElementById('zoomOut').addEventListener('click', function() {
-    if (scale <= 0.8) return;
-    scale -= 0.2;
-    renderPage(pageNum);
-  });
+document.getElementById('zoomIn').onclick = ()=>{
+  scale += .15;
+  renderPage(pageNum);
+};
+
+document.getElementById('zoomOut').onclick = ()=>{
+  if(scale <= .75) return;
+  scale -= .15;
+  renderPage(pageNum);
+};
+
+document.addEventListener('keydown', e=>{
+  if(e.key === 'ArrowLeft') document.getElementById('prev').click();
+  if(e.key === 'ArrowRight') document.getElementById('next').click();
+});
 </script>
 
 </body>
