@@ -141,11 +141,11 @@ canvas{
     padding:0 10px 35px;
   }
 
-canvas{
-  max-width:100%;
-  height:auto;
-  border-radius:12px;
-}
+  canvas{
+    max-width:100%;
+    height:auto;
+    border-radius:12px;
+  }
 }
 </style>
 </head>
@@ -180,13 +180,20 @@ let pdfDoc = null;
 let pageNum = 1;
 let scale = window.innerWidth < 760 ? 1.15 : 1.55;
 let isRendering = false;
+let pendingPage = null;
 
 const canvas = document.getElementById('pdf-canvas');
 const ctx = canvas.getContext('2d');
 const loader = document.getElementById('loader');
 
 function renderPage(num){
-  if(!pdfDoc || isRendering) return;
+  if(!pdfDoc) return;
+
+  if(isRendering){
+    pendingPage = num;
+    return;
+  }
+
   isRendering = true;
 
   pdfDoc.getPage(num).then(page=>{
@@ -194,16 +201,20 @@ function renderPage(num){
     canvas.width = viewport.width;
     canvas.height = viewport.height;
 
-    const renderContext = {
+    page.render({
       canvasContext:ctx,
       viewport:viewport
-    };
-
-    page.render(renderContext).promise.then(()=>{
+    }).promise.then(()=>{
       document.getElementById('page_num').textContent = num;
       loader.style.display = 'none';
       canvas.style.display = 'block';
       isRendering = false;
+
+      if(pendingPage !== null){
+        const nextPage = pendingPage;
+        pendingPage = null;
+        renderPage(nextPage);
+      }
     });
   });
 }
@@ -229,13 +240,13 @@ document.getElementById('next').onclick = ()=>{
 };
 
 document.getElementById('zoomIn').onclick = ()=>{
-  scale += .15;
+  scale += .2;
   renderPage(pageNum);
 };
 
 document.getElementById('zoomOut').onclick = ()=>{
   if(scale <= .75) return;
-  scale -= .15;
+  scale -= .2;
   renderPage(pageNum);
 };
 
