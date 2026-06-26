@@ -11,10 +11,13 @@
 :root{
   --green:#5F723B;
   --green-hover:#70884A;
+  --menu-green:rgba(128,140,97,.92);
   --cream:#FBFAF6;
   --text:#2F241D;
   --muted:#8B8278;
   --white:#FCFAF4;
+  --accent:#FF5A3D;
+  --accent-hover:#F0462A;
 }
 
 *{box-sizing:border-box}
@@ -34,10 +37,12 @@ body{
   align-items:center;
   justify-content:space-between;
   gap:16px;
-  padding:14px 22px;
-  background:var(--green);
+  padding:14px 18px;
+  background:var(--menu-green);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
   color:var(--white);
-  box-shadow:0 4px 20px rgba(0,0,0,.12);
+  box-shadow:0 8px 24px rgba(0,0,0,.08);
 }
 
 .pk-title{
@@ -53,9 +58,9 @@ body{
 }
 
 .pk-btn{
-  border:0;
-  background:var(--white);
-  color:var(--green);
+  border:1px solid rgba(252,250,244,.35);
+  background:rgba(252,250,244,.18);
+  color:var(--white);
   padding:9px 15px;
   border-radius:999px;
   font-size:14px;
@@ -64,28 +69,31 @@ body{
 }
 
 .pk-btn:hover{
-  background:#ECE8DD;
+  background:rgba(252,250,244,.30);
 }
 
 .pk-info{
   min-width:92px;
   text-align:center;
   font-size:14px;
+  font-weight:600;
   color:var(--white);
 }
 
 .pk-download{
-  color:var(--white);
+  color:#fff;
+  background:var(--accent);
   text-decoration:none;
-  border:1px solid rgba(252,250,244,.5);
-  padding:9px 16px;
+  border:0;
+  padding:10px 18px;
   border-radius:999px;
   font-size:14px;
+  font-weight:600;
   transition:.2s;
 }
 
 .pk-download:hover{
-  background:rgba(252,250,244,.14);
+  background:var(--accent-hover);
 }
 
 .pk-wrap{
