@@ -89,15 +89,19 @@ body{
 }
 
 .pk-wrap{
-  max-width:1120px;
+  width:100%;
   margin:32px auto;
   padding:0 18px 50px;
   text-align:center;
+  overflow:auto;
 }
 
 canvas{
-  width:100%;
+  display:block;
+  margin:0 auto;
+  width:auto;
   height:auto;
+  max-width:none;
   background:#fff;
   border-radius:18px;
   box-shadow:0 12px 45px rgba(0,0,0,.14);
@@ -137,9 +141,11 @@ canvas{
     padding:0 10px 35px;
   }
 
-  canvas{
-    border-radius:12px;
-  }
+canvas{
+  max-width:100%;
+  height:auto;
+  border-radius:12px;
+}
 }
 </style>
 </head>
